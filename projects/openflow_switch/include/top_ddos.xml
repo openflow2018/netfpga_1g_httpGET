@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nf:module xmlns:nf="http://www.NetFPGA.org/NF2_register_system" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.NetFPGA.org/NF2_register_system NF2_register_system.xsd ">
+	<nf:name>top_ddos</nf:name>
+	<nf:prefix>top_ddos</nf:prefix>
+	<nf:location>udp</nf:location>
+	<nf:description>Registers for Clock controller Module</nf:description>
+	<nf:blocksize>64</nf:blocksize>
+	<nf:registers>
+		<nf:register>
+		  <nf:name>THRESHOLD</nf:name>
+			<nf:description>Threshold to detect bot IP</nf:description>
+			<nf:type>generic_software32</nf:type>
+		</nf:register>
+		<nf:register>
+		  <nf:name>MAX_COUNT</nf:name>
+			<nf:description>Max value of flush_1s counter</nf:description>
+			<nf:type>generic_software32</nf:type>
+		</nf:register>
+		<nf:register>
+		  <nf:name>CONTROL_MODE</nf:name>
+			<nf:description>Mode options to clock bot IP</nf:description>
+			<nf:type>generic_software32</nf:type>
+		</nf:register>
+		<nf:register>
+		  <nf:name>FLUSH_SIGNAL</nf:name>
+			<nf:description>clock flushing hash table</nf:description>
+			<nf:type>generic_hardware32</nf:type>
+		</nf:register>
+		<nf:register>
+		  <nf:name>COUNT_1</nf:name>
+			<nf:description>The Key value used by the Clock Controller Module</nf:description>
+			<nf:type>generic_hardware32</nf:type>
+		</nf:register>
+		<nf:register>
+		  <nf:name>SRC_IP_1</nf:name>
+			<nf:description>The Key value used by the Clock Controller Module</nf:description>
+			<nf:type>generic_hardware32</nf:type>
+		</nf:register>
+		<nf:register>
+		  <nf:name>DETECTED_IP</nf:name>
+			<nf:description>The Key value used by the Clock Controller Module</nf:description>
+			<nf:type>generic_hardware32</nf:type>
+		</nf:register>
+	</nf:registers>
+	<nf:constants>
+	</nf:constants>
+	<nf:types>		
+	</nf:types>
+</nf:module>

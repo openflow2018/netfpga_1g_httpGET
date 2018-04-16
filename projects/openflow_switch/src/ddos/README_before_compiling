@@ -1,0 +1,7 @@
+Notice before compiling:
+
+1. BRAM, BRAM2: //initial
+2. --Registers interface: top_ddos.v 
+3. change Threshold to 8
+4. change parameters of clock 1s, 10s (drop_arbiter.v + hash_table.v)
+   if(addr_flush=={MAX_DEPTH_BITS{1'b1}}) begin

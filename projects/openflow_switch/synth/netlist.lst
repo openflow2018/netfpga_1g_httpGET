@@ -1,0 +1,11 @@
+/root/netfpga/projects/openflow_switch/synth/nf2_top.ngc 1494127114
+/root/netfpga/projects/openflow_switch/synth/syncfifo_2048x72.ngc 1471340424
+/root/netfpga/projects/openflow_switch/synth/srl_cam_unencoded_32x32.ngc 1455885520
+/root/netfpga/projects/openflow_switch/synth/cdq_tx_fifo_256x72_to_36.ngc 1471340196
+/root/netfpga/projects/openflow_switch/synth/cdq_rx_fifo_512x36_to_72.ngc 1471340152
+/root/netfpga/projects/openflow_switch/synth/txfifo_512x72_to_9.ngc 1471340374
+/root/netfpga/projects/openflow_switch/synth/rxfifo_8kx9_to_72.ngc 1471340298
+/root/netfpga/projects/openflow_switch/synth/rxlengthfifo_128x13.ngc 1471340320
+/root/netfpga/projects/openflow_switch/synth/pci2net_16x60.ngc 1471340468
+/root/netfpga/projects/openflow_switch/synth/net2pci_16x32.ngc 1471340446
+OK

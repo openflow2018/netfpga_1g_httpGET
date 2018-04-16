@@ -1,0 +1,122 @@
+Release 10.1 Map K.31 (lin64)
+Xilinx Map Application Log File for Design 'nf2_top'
+
+Design Information
+------------------
+Command Line   : map -intstyle ise -timing -detail -ol high -cm speed
+-register_duplication -ignore_keep_hierarchy -pr b -k 4 -c 100 -tx off
+nf2_top.ngd 
+Target Device  : xc2vp50
+Target Package : ff1152
+Target Speed   : -7
+Mapper Version : virtex2p -- $Revision: 1.46 $
+Mapped Date    : Sun May  7 10:19:02 2017
+
+Mapping design into LUTs...
+Running directed packing...
+Running delay-based LUT packing...
+Running timing-driven packing...
+
+Phase 1.1
+Phase 1.1 (Checksum:b21454) REAL time: 1 mins 12 secs 
+
+Phase 2.7
+Phase 2.7 (Checksum:1312cfe) REAL time: 1 mins 13 secs 
+
+Phase 3.31
+Phase 3.31 (Checksum:1c9c37d) REAL time: 1 mins 13 secs 
+
+Phase 4.2
+
+.
+Phase 4.2 (Checksum:26259fc) REAL time: 1 mins 30 secs 
+
+Phase 5.30
+Phase 5.30 (Checksum:2faf07b) REAL time: 1 mins 30 secs 
+
+Phase 6.3
+Phase 6.3 (Checksum:39386fa) REAL time: 1 mins 31 secs 
+
+Phase 7.5
+Phase 7.5 (Checksum:42c1d79) REAL time: 1 mins 32 secs 
+
+Phase 8.4
+........................................
+......................
+..............
+Phase 8.4 (Checksum:a664c7) REAL time: 2 mins 24 secs 
+
+Phase 9.28
+Phase 9.28 (Checksum:55d4a77) REAL time: 2 mins 28 secs 
+
+Phase 10.8
+........................................
+....................
+.........................
+......
+...............................................................
+...............
+...............
+...............
+........................................................................
+Phase 10.8 (Checksum:1a00f3ec) REAL time: 5 mins 10 secs 
+
+Phase 11.29
+Phase 11.29 (Checksum:68e7775) REAL time: 5 mins 10 secs 
+
+Phase 12.5
+Phase 12.5 (Checksum:7270df4) REAL time: 5 mins 11 secs 
+
+Phase 13.18
+Phase 13.18 (Checksum:7bfa473) REAL time: 7 mins 35 secs 
+
+Phase 14.5
+Phase 14.5 (Checksum:8583af2) REAL time: 7 mins 36 secs 
+
+Phase 15.27
+Phase 15.27 (Checksum:8f0d171) REAL time: 7 mins 44 secs 
+
+Phase 16.24
+Phase 16.24 (Checksum:98967f0) REAL time: 7 mins 49 secs 
+
+REAL time consumed by placer: 7 mins 51 secs 
+CPU  time consumed by placer: 7 mins 51 secs 
+Invoking physical synthesis ...
+
+Physical synthesis completed.
+
+Design Summary
+--------------
+
+Design Summary:
+Number of errors:      0
+Number of warnings: 2989
+Logic Utilization:
+  Number of Slice Flip Flops:        21,213 out of  47,232   44%
+  Number of 4 input LUTs:            35,969 out of  47,232   76%
+Logic Distribution:
+  Number of occupied Slices:         21,874 out of  23,616   92%
+    Number of Slices containing only related logic:  21,874 out of  21,874 100%
+    Number of Slices containing unrelated logic:          0 out of  21,874   0%
+      *See NOTES below for an explanation of the effects of unrelated logic.
+  Total Number of 4 input LUTs:      38,386 out of  47,232   81%
+    Number used as logic:            28,217
+    Number used as a route-thru:      2,417
+    Number used for Dual Port RAMs:   3,136
+      (Two LUTs used per Dual Port RAM)
+    Number used for 32x1 RAMs:          256
+      (Two LUTs used per 32x1 RAM)
+    Number used as 16x1 RAMs:           160
+    Number used as Shift registers:   4,200
+  Number of bonded IOBs:                356 out of     692   51%
+    IOB Flip Flops:                     616
+  Number of RAMB16s:                    221 out of     232   95%
+  Number of BUFGMUXs:                     8 out of      16   50%
+  Number of DCMs:                         6 out of       8   75%
+
+Peak Memory Usage:  2424 MB
+Total REAL time to MAP completion:  11 mins 10 secs 
+Total CPU time to MAP completion:   11 mins 10 secs 
+
+Mapping completed.
+See MAP report file "nf2_top.mrp" for details.

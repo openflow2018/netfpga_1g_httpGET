@@ -1,0 +1,16 @@
+
+Description:
+- May 7:
+	+ change clock flushing blacklist: 60s
+- March 4: 
+	+ BRAM width: 14 bit - 43% BRAMs
+	+ add 3 software_regs: THRESHOLD, MAX_COUNT(hash table), CONTROL_MODE 
+	+ add 1 more hardware_reg: FLUSH_1S - display clock 1s (hash table)
+
+- Feb 18: 
+	+ test software regs: top_ddos.v: 
+		control_reg = 3 --> reset black list every 10s
+		control_reg = 5 --> always clear black list, all packets pass through
+
+- Feb 16: 
+	+ initialize clock 1s and clock 10s

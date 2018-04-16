@@ -1,0 +1,313 @@
+/* ****************************************************************************
+ * vim:set shiftwidth=2 softtabstop=2 expandtab:
+ * $Id: counterdump.c 5455 2009-05-05 18:18:16Z g9coving $
+ *
+ * Module:  counterdump.c
+ * Project: NetFPGA OpenFlow Switch WFQ
+ * Description: dumps the MAC Rx/Tx counters to stdout
+ * Authors: Viet An - Phung Luan
+ *
+*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+
+#include <net/if.h>
+
+//#include "../../lib/C/reg_defines_openflow_switch.h"
+#include "../../lib/C/reg_defines_openflow_switch.h"
+#include "../../../../lib/C/common/nf2.h"
+#include "../../../../lib/C/common/nf2util.h"
+
+#define PATHLEN   80
+
+#define DEFAULT_IFACE "nf2c0"
+
+/* Global vars */
+static struct nf2device nf2;
+
+/* Function declarations */
+void dumpCounts();
+void processArgs (int , char **);
+void usage (void);
+// void dumpSharedBuffer();
+// void check_weight();
+// void check_ftime();
+void check_share_buffer();
+
+void check_tag_sort();
+void check_ftime_tag_25_02();
+//void check_DDOS1 ();
+//void check_DDOS2 ();
+//void test_1();
+void test_2();
+//void pr_IP();
+//void check_state_url_extract ();
+
+
+int main(int argc, char *argv[])
+{
+  nf2.device_name = DEFAULT_IFACE;
+
+  processArgs(argc, argv);
+
+  // Open the interface if possible
+  if (check_iface(&nf2))
+    {
+      exit(1);
+    }
+  if (openDescriptor(&nf2))
+    {
+      exit(1);
+    }
+
+    test_2();
+  
+
+    closeDescriptor(&nf2);
+
+  return 0;
+}
+
+/*void test_1(){
+  unsigned temp;
+  unsigned val;
+  readReg(&nf2, TOP_DDOS_DDOS_0_REG, &val);
+  printf("counter 2: %d\n", val&0x0000ffff);
+  printf("counter 1: %d\n", (val&0xffff0000)>>16);
+  temp = val;
+
+  while(1){
+    readReg(&nf2, TOP_DDOS_DDOS_0_REG, &val);
+    if(temp != val){
+       printf("counter 2: %d\n", val&0x0000ffff);
+        printf("counter 1: %d\n", (val&0xffff0000)>>16);
+       temp = val;
+    }
+  }
+
+}*/
+
+void test_2(){
+  unsigned temp,temp1,temp2, temp_drop;
+  unsigned val;
+  unsigned val1; // for count
+  unsigned val2; // for ip attack
+  unsigned val_drop;
+
+  writeReg(&nf2, OPENFLOW_LOOKUP_NUM_PKTS_DROPPED_6_REG, 0);
+  writeReg(&nf2, TOP_DDOS_IP_1_REG, 0);
+  writeReg(&nf2, TOP_DDOS_COUNT_1_REG, 0);
+  writeReg(&nf2, TOP_DDOS_DDOS_IP_REG, 0);
+
+  readReg(&nf2, TOP_DDOS_IP_1_REG, &val);
+  printIP(val);
+  printf("\n");
+
+  readReg(&nf2, TOP_DDOS_COUNT_1_REG, &val1);
+  printf("%04x\n", val1);
+  
+  readReg(&nf2, TOP_DDOS_DDOS_IP_REG, &val2);
+  printIP(val2);
+  printf("\n");
+
+  readReg(&nf2, OPENFLOW_LOOKUP_NUM_PKTS_DROPPED_6_REG, &val_drop);
+  printf("OPENFLOW_LOOKUP_NUM_PKTS_DROPPED_6_REG: %d\n", val_drop);
+  printf("\n \n");
+
+  temp = val;
+  temp1 = val1;
+  temp2 = val2;
+  temp_drop = val_drop;
+
+  while(1){
+    readReg(&nf2, TOP_DDOS_IP_1_REG, &temp);
+    readReg(&nf2, TOP_DDOS_COUNT_1_REG, &temp1);
+    readReg(&nf2, TOP_DDOS_DDOS_IP_REG, &temp2);
+    readReg(&nf2, OPENFLOW_LOOKUP_NUM_PKTS_DROPPED_6_REG, &temp_drop);
+
+    if((temp != val)||(temp1 != val1)||(temp2 != val2) || (val_drop != temp_drop)){
+      printIP(temp);
+      printf("\n");
+      printf("%04x\n", temp1);
+      printIP(temp2); printf("\n");
+
+      // readReg(&nf2, OPENFLOW_LOOKUP_NUM_PKTS_DROPPED_7_REG, &val_drop);
+      // printf("OPENFLOW_LOOKUP_NUM_PKTS_DROPPED_7_REG: %d\n", val_drop);
+      
+      // readReg(&nf2, OPENFLOW_LOOKUP_NUM_PKTS_DROPPED_6_REG, &val_drop);
+      printf("OPENFLOW_LOOKUP_NUM_PKTS_DROPPED_6_REG: %d\n", val_drop);
+
+      // readReg(&nf2, OPENFLOW_LOOKUP_NUM_PKTS_DROPPED_5_REG, &val_drop);
+      // printf("OPENFLOW_LOOKUP_NUM_PKTS_DROPPED_5_REG: %d\n", val_drop);
+
+      // readReg(&nf2, OPENFLOW_LOOKUP_NUM_PKTS_DROPPED_4_REG, &val_drop);
+      // printf("OPENFLOW_LOOKUP_NUM_PKTS_DROPPED_4_REG: %d\n", val_drop);
+
+      // readReg(&nf2, OPENFLOW_LOOKUP_NUM_PKTS_DROPPED_3_REG, &val_drop);
+      // printf("OPENFLOW_LOOKUP_NUM_PKTS_DROPPED_3_REG: %d\n", val_drop);
+
+      // readReg(&nf2, OPENFLOW_LOOKUP_NUM_PKTS_DROPPED_2_REG, &val_drop);
+      // printf("OPENFLOW_LOOKUP_NUM_PKTS_DROPPED_2_REG: %d\n", val_drop);
+
+      // readReg(&nf2, OPENFLOW_LOOKUP_NUM_PKTS_DROPPED_1_REG, &val_drop);
+      // printf("OPENFLOW_LOOKUP_NUM_PKTS_DROPPED_1_REG: %d\n", val_drop);
+
+      // readReg(&nf2, OPENFLOW_LOOKUP_NUM_PKTS_DROPPED_0_REG, &val_drop);
+      // printf("OPENFLOW_LOOKUP_NUM_PKTS_DROPPED_0_REG: %d\n", val_drop);
+
+      printf("\n\n\n");
+      val = temp;
+      val1 = temp1;
+      val2 = temp2;
+      val_drop = temp_drop;
+    }
+  }
+}
+
+/*void pr_IP() {
+  FILE *fp;
+  fp = fopen("bot_list.txt","w");
+
+  unsigned val,temp;
+  unsigned c=0;//xca080176;
+  readReg(&nf2, TOP_DDOS_DDOS_1_REG, &val);
+  temp=val;
+  if(val!=0xdeadbeef) {
+    fprintf(fp, "%04x\n", val);
+    c++;
+  }
+  while(c<5) {
+    readReg(&nf2, TOP_DDOS_DDOS_1_REG, &val);
+    if(val!=0xdeadbeef&&temp!=val) {
+      c++;
+      fprintf(fp, "%04x\n", val);
+      printf("%d     &     %04x\n", c,val);
+    }
+  temp=val;
+  }
+  /*int i=0;
+  for (i = 0; i < 6; ++i)
+  {
+    fprintf(fp, "%04x\n", c);
+  }
+
+  fclose(fp);
+}*/
+
+
+/*void dumpCounts()
+{
+  unsigned val;
+
+  readReg(&nf2, MAC_GRP_0_RX_QUEUE_NUM_PKTS_STORED_REG, &val);
+  printf("Num pkts received on port 0:           %u\n", val);
+  readReg(&nf2, MAC_GRP_0_RX_QUEUE_NUM_PKTS_DROPPED_FULL_REG, &val);
+  printf("Num pkts dropped (rx queue 0 full):    %u\n", val);
+  readReg(&nf2, MAC_GRP_0_RX_QUEUE_NUM_PKTS_DROPPED_BAD_REG, &val);
+  printf("Num pkts dropped (bad fcs q 0):        %u\n", val);
+  readReg(&nf2, MAC_GRP_0_RX_QUEUE_NUM_BYTES_PUSHED_REG, &val);
+  printf("Num bytes received on port 0:          %u\n", val);
+  readReg(&nf2, MAC_GRP_0_TX_QUEUE_NUM_PKTS_SENT_REG, &val);
+  printf("Num pkts sent from port 0:             %u\n", val);
+  readReg(&nf2, MAC_GRP_0_TX_QUEUE_NUM_BYTES_PUSHED_REG, &val);
+  printf("Num bytes sent from port 0:            %u\n\n", val);
+
+  readReg(&nf2, MAC_GRP_1_RX_QUEUE_NUM_PKTS_STORED_REG, &val);
+  printf("Num pkts received on port 1:           %u\n", val);
+  readReg(&nf2, MAC_GRP_1_RX_QUEUE_NUM_PKTS_DROPPED_FULL_REG, &val);
+  printf("Num pkts dropped (rx queue 1 full):    %u\n", val);
+  readReg(&nf2, MAC_GRP_1_RX_QUEUE_NUM_PKTS_DROPPED_BAD_REG, &val);
+  printf("Num pkts dropped (bad fcs q 1):        %u\n", val);
+  readReg(&nf2, MAC_GRP_1_RX_QUEUE_NUM_BYTES_PUSHED_REG, &val);
+  printf("Num bytes received on port 1:          %u\n", val);
+  readReg(&nf2, MAC_GRP_1_TX_QUEUE_NUM_PKTS_SENT_REG, &val);
+  printf("Num pkts sent from port 1:             %u\n", val);
+  readReg(&nf2, MAC_GRP_1_TX_QUEUE_NUM_BYTES_PUSHED_REG, &val);
+  printf("Num bytes sent from port 1:            %u\n\n", val);
+
+  readReg(&nf2, MAC_GRP_2_RX_QUEUE_NUM_PKTS_STORED_REG, &val);
+  printf("Num pkts received on port 2:           %u\n", val);
+  readReg(&nf2, MAC_GRP_2_RX_QUEUE_NUM_PKTS_DROPPED_FULL_REG, &val);
+  printf("Num pkts dropped (rx queue 2 full):    %u\n", val);
+  readReg(&nf2, MAC_GRP_2_RX_QUEUE_NUM_PKTS_DROPPED_BAD_REG, &val);
+  printf("Num pkts dropped (bad fcs q 2):        %u\n", val);
+  readReg(&nf2, MAC_GRP_2_RX_QUEUE_NUM_BYTES_PUSHED_REG, &val);
+  printf("Num bytes received on port 2:          %u\n", val);
+  readReg(&nf2, MAC_GRP_2_TX_QUEUE_NUM_PKTS_SENT_REG, &val);
+  printf("Num pkts sent from port 2:             %u\n", val);
+  readReg(&nf2, MAC_GRP_2_TX_QUEUE_NUM_BYTES_PUSHED_REG, &val);
+  printf("Num bytes sent from port 2:            %u\n\n", val);
+
+  readReg(&nf2, MAC_GRP_3_RX_QUEUE_NUM_PKTS_STORED_REG, &val);
+  printf("Num pkts received on port 3:           %u\n", val);
+  readReg(&nf2, MAC_GRP_3_RX_QUEUE_NUM_PKTS_DROPPED_FULL_REG, &val);
+  printf("Num pkts dropped (rx queue 3 full):    %u\n", val);
+  readReg(&nf2, MAC_GRP_3_RX_QUEUE_NUM_PKTS_DROPPED_BAD_REG, &val);
+  printf("Num pkts dropped (bad fcs q 3):        %u\n", val);
+  readReg(&nf2, MAC_GRP_3_RX_QUEUE_NUM_BYTES_PUSHED_REG, &val);
+  printf("Num bytes received on port 3:          %u\n", val);
+  readReg(&nf2, MAC_GRP_3_TX_QUEUE_NUM_PKTS_SENT_REG, &val);
+  printf("Num pkts sent from port 3:             %u\n", val);
+  readReg(&nf2, MAC_GRP_3_TX_QUEUE_NUM_BYTES_PUSHED_REG, &val);
+  printf("Num bytes sent from port 3:            %u\n\n", val);
+}
+*/
+
+
+
+
+
+
+
+/*
+ *  Process the arguments.
+ */
+void processArgs (int argc, char **argv )
+{
+  char c;
+
+  /* don't want getopt to moan - I can do that just fine thanks! */
+  opterr = 0;
+
+  while ((c = getopt (argc, argv, "i:h")) != -1)
+    {
+      switch (c)
+  {
+  case 'i': /* interface name */
+    nf2.device_name = optarg;
+    break;
+  case '?':
+    if (isprint (optopt))
+      fprintf (stderr, "Unknown option `-%c'.\n", optopt);
+    else
+      fprintf (stderr,
+         "Unknown option character `\\x%x'.\n",
+         optopt);
+  case 'h':
+  default:
+    usage();
+    exit(1);
+  }
+    }
+}
+
+
+/*
+ *  Describe usage of this program.
+ */
+void usage (void)
+{
+  printf("Usage: ./counterdump <options> \n\n");
+  printf("Options: -i <iface> : interface name (default nf2c0)\n");
+  printf("         -h : Print this message and exit.\n");
+}
+
+void printIP(unsigned ip)
+{
+  printf("%u.%u.%u.%u",
+      ((ip>>24)&0xff), ((ip>>16)&0xff), ((ip>>8)&0xff), ((ip>>0)&0xff)
+    );
+}
